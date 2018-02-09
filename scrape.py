@@ -26,4 +26,6 @@ for line in sys.stdin:
 """
 
 for i in sys.stdin:
-	sys.stdout.write("recieved")
+	sys.stdout.write(i);
+	
+
