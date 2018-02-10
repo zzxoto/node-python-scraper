@@ -9,7 +9,11 @@ let options = {
 	agent: agent
 };
 
-module.exports = function(queryParameter){
+module.exports = function(rawData){
+	//@param rawData => text input obtained from stdInput
+	//resolves a readable stream;
+	let queryParameter = rawData.trim().split(" ").join("+")
+
 	let _options = {...options, path: `/search?q=${queryParameter}`};
 	
 	return new Promise(function(resolve, reject){
@@ -17,18 +21,9 @@ module.exports = function(queryParameter){
 		let html = "";
 		req.end();
 
-		req.on('response', (res)=>{	
-
-			//res is a readable stream
-			res.on("data", (data)=>{
-				html += data.toString().trim();
-			});	
-			
-			res.on("end", (data)=>{
-				resolve(html);
-				res.destroy();
-			});
-			
+		req.on('response', (res)=>{
+			res.setEncoding('utf8');
+			resolve(res);	
 		});
 	})
 
