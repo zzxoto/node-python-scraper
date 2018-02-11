@@ -1,23 +1,53 @@
-var req = require('./httpRequest');
-var scraper = require('./pythonScraper');
+let req = require('./httpRequest');
+let scraper = require('./pythonScraper');
 
-let idle = true;
+let currState = "newQuery";
+let currQueryString = "";
+
 process.stdin.on('data', async function(data){
-	try{
-		if(idle){
-			idle = false;
-			
-			data = data.toString();
-			
-			let htmlSource = await req(data);//onAverage html is 200KB
-			let scraped = await scraper.scrape(htmlSource);
-			idle = true;
-		}
-		else
-			console.log("Still Scraping")
+	data = data.toString().trim()
+	if (data === "q*"){
+		console.log("quitting..");
+		process.exit();
 	}
-	catch(err){
-		console.log(err);
+	else if(currState === "moreQuery"){
+		currState = null;
+		currState = await moreQuery(data);
 	}
-	
+	else if (currState === "newQuery"){
+		currState = null;
+		currState = await newQuery(data);
+	}
+	else
+		console.log("Still Processing. Just a moment...");
 });
+
+var newQuery = (input, morePages)=>{
+	return new Promise(async function(resolve, reject){		
+		currQueryString = input;
+		
+		let htmlSource = await req(input, morePages);
+		await scraper(htmlSource);
+		
+		prompt(input);
+		resolve("moreQuery");
+	})
+}
+
+var moreQuery = (input) =>{
+	if (input === "m")
+		return newQuery(currQueryString, true);
+	else
+		return newQuery(input);
+}
+
+var prompt = (x)=>{
+		console.log();
+		if (x)
+			console.log(`Hit 'm' for more results for '${x}'`);
+		
+		console.log("Enter 'q*' anytime you want to Quit");
+		process.stdout.write("Start typing to Search: ");
+}
+prompt();
+
