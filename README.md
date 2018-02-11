@@ -1,4 +1,7 @@
 "node main" to start
+
+google.com search and scrape using barebone Node and Python(BeautifulSoup)
+
 http request via Node.js. Parsing html via Beautiful Soup
 Command Line Interface parsing and displaying.
 
