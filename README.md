@@ -1,4 +1,4 @@
-"node main" to start
+"npm start" to start
 
 google.com search and scrape using barebone Node and Python(BeautifulSoup)
 

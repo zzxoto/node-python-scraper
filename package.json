@@ -1,0 +1,7 @@
+{
+	"name":"node-python-scraper",
+	"author":"Abhaya Uprety",
+	"scripts":{
+		"start": "node main.js"
+	}
+}
