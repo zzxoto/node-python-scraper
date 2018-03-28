@@ -1,0 +1,6 @@
+-----------
+>>main.js prompts for queryString from user and sends get request to google with search parameter search?q=${querystring} 
+>>google sends approx 90KB worth of content.
+>>content is buffered into the stdin of scrape.py(spawned process)
+>>python scrapes and sends list of title and url of google search back into the stdout of main process and it is presented to user.
+>>User can then ask for more query or end.
